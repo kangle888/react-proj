@@ -1,12 +1,6 @@
-// breadcrumbNameMap.ts
-export const breadcrumbNameMap: { [key: string]: string } = {
-  "/option1": "Option 1",
-  "/option2": "Option 2",
-  "/user": "User",
-  "/user/tom": "Tom",
-  "/user/bill": "Bill",
-  "/user/alex": "Alex",
-  "/team/team1": "Team 1",
-  "/team/team2": "Team 2",
-  "/files": "Files",
+// utils/breadcrumbNameMap.ts
+export const breadcrumbNameMap: Record<string, string> = {
+  '/home': '系统总览',
+  '/about': '功能配置',
+  // 添加更多映射
 };

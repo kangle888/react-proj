@@ -20,12 +20,10 @@ const getItem = (
   label,
 });
 
+// 确保路径与路由配置一致
 const items: MenuItem[] = [
-  getItem("功能配置", "/option1", <PieChartOutlined />),
-  getItem("系统总览", "sub1", <UserOutlined />, [
-    getItem("病毒查杀", "/user/tom"),
-    getItem("入侵防护", "/user/bill"),
-  ]),
+  getItem("功能配置", "/about", <PieChartOutlined />), // 更新路径
+  getItem("系统总览", "/home", <UserOutlined />), // 更新路径
 ];
 
 const MenuComponent: React.FC = () => {
@@ -42,7 +40,7 @@ const MenuComponent: React.FC = () => {
       <div className={styles.logoVertical} />
       <Menu
         theme="dark"
-        defaultSelectedKeys={["1"]}
+        defaultSelectedKeys={["/home"]} // 默认选中项
         mode="inline"
         items={items}
         onClick={onMenuClick} // 点击时触发导航
