@@ -1,10 +1,10 @@
 import React from "react";
-import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { Routes, Route, useLocation, } from "react-router-dom";
 import { Layout, Breadcrumb, theme } from "antd";
-import MenuComponent from "./components/MenuComponent"; // 你已有的菜单组件
+import MenuComponent from "./components/MenuComponent/MenuComponent"; // 你已有的菜单组件
 import { breadcrumbNameMap } from "./utils/breadcrumbNameMap";
-import { HomePage } from "./views/homePage";
-import { AboutPage } from "./views/aboutPage";
+import routes from './router/index';
+
 
 const { Header, Content, Footer } = Layout;
 
@@ -16,10 +16,11 @@ const App: React.FC = () => {
   const pathSnippets = location.pathname.split("/").filter((i) => i);
 
   // 生成面包屑路径
-  const breadcrumbItems = pathSnippets.map((_, index) => {
+   // 生成面包屑路径
+   const breadcrumbItems = pathSnippets.map((_, index) => {
     const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
     return {
-      title: <span>{breadcrumbNameMap[url]}</span>,
+      title: <span>{breadcrumbNameMap[url] || url}</span>, // 使用映射或默认路径
     };
   });
   return (
@@ -42,15 +43,9 @@ const App: React.FC = () => {
         >
           {/* 配置路由 */}
           <Routes>
-            <Route path="/option1" element={<HomePage />} />
-            <Route path="/option2" element={<div>Option 2 Content</div>} />
-            <Route path="/user/tom" element={<AboutPage />} />
-            <Route path="/user" element={<Navigate to="/user/tom" />} />
-            <Route path="/user/bill" element={<AboutPage />} />
-            <Route path="/user/alex" element={<div>Alex's Profile</div>} />
-            <Route path="/team/team1" element={<div>Team 1 Content</div>} />
-            <Route path="/team/team2" element={<div>Team 2 Content</div>} />
-            <Route path="/files" element={<div>Files Content</div>} />
+            {routes.map((route) => (
+              <Route key={route.path} path={route.path} element={route.element} />
+            ))}
           </Routes>
         </Content>
         <Footer style={{ textAlign: "center" }}>
