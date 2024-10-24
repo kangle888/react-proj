@@ -1,58 +1,44 @@
 import React from "react";
-import { Routes, Route, useLocation, } from "react-router-dom";
-import { Layout, Breadcrumb, theme } from "antd";
-import MenuComponent from "./components/MenuComponent/MenuComponent"; // 你已有的菜单组件
-import { breadcrumbNameMap } from "./utils/breadcrumbNameMap";
-import routes from './router/index';
+import { Layout, theme } from "antd";
+import { Routes, Route, useLocation } from "react-router-dom";
+import MenuComponent from "./components/MenuComponent/MenuComponent";
+import BreadcrumbComponent from "./components/BreadcrumbComponent";
+import ContentComponent from "./components/ContentComponent";
+import { LoginPage } from "./views/loginPage";
 
-
-const { Header, Content, Footer } = Layout;
+const { Header, Footer } = Layout;
 
 const App: React.FC = () => {
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
   const location = useLocation();
-  const pathSnippets = location.pathname.split("/").filter((i) => i);
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
 
-  // 生成面包屑路径
-   // 生成面包屑路径
-   const breadcrumbItems = pathSnippets.map((_, index) => {
-    const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
-    return {
-      title: <span>{breadcrumbNameMap[url] || url}</span>, // 使用映射或默认路径
-    };
-  });
+  // 判断是否是登录页
+  const isLoginPage = location.pathname === "/login";
+
   return (
-    <Layout style={{ minHeight: "100vh" }}>
-      <MenuComponent /> {/* 渲染菜单组件 */}
-      <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }} />
-        <Breadcrumb
-          style={{ margin: "24px 16px 0 16px" }}
-          items={breadcrumbItems}
-        />
-        <Content
-          style={{
-            margin: "24px 16px",
-            padding: 24,
-            minHeight: 280,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          {/* 配置路由 */}
-          <Routes>
-            {routes.map((route) => (
-              <Route key={route.path} path={route.path} element={route.element} />
-            ))}
-          </Routes>
-        </Content>
-        <Footer style={{ textAlign: "center" }}>
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
-        </Footer>
-      </Layout>
-    </Layout>
+    <>
+      {isLoginPage ? (
+        // 如果是登录页，直接渲染登录页面
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+        </Routes>
+      ) : (
+        // 否则渲染带 Layout 的内容
+        <Layout style={{ minHeight: "100vh" }}>
+          <MenuComponent /> {/* 渲染菜单组件 */}
+          <Layout>
+            <Header style={{ padding: 0, background: colorBgContainer }} />
+            <BreadcrumbComponent /> {/* 渲染面包屑组件 */}
+            <ContentComponent /> {/* 渲染内容组件 */}
+            <Footer style={{ textAlign: "center" }}>
+              Ant Design ©{new Date().getFullYear()} Created by Ant UED
+            </Footer>
+          </Layout>
+        </Layout>
+      )}
+    </>
   );
 };
 
