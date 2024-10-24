@@ -6,37 +6,51 @@ import styles from './TimeRangePicker.module.less';
 
 dayjs.extend(customParseFormat);
 
-const TimeRangePicker = () => {
-  const [startTime, setStartTime] = useState<Dayjs | null>(null); // 设置状态为 Dayjs | null
+interface TimeRangePickerProps {
+  onTimeChange: (startTime: Dayjs | null, endTime: Dayjs | null) => void; // 接收父组件传递的回调函数
+}
+
+const TimeRangePicker: React.FC<TimeRangePickerProps> = ({ onTimeChange }) => {
+  const [startTime, setStartTime] = useState<Dayjs | null>(null);
   const [endTime, setEndTime] = useState<Dayjs | null>(null);
   const [isHoveredStart, setIsHoveredStart] = useState(false);
   const [isHoveredEnd, setIsHoveredEnd] = useState(false);
 
-  const handleStartChange = (event : any) => {
+  const handleStartChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newStartTime = dayjs(event.target.value);
     setStartTime(newStartTime);
 
     if (newStartTime.isAfter(endTime) || !endTime) {
-      setEndTime(newStartTime.add(15, 'minute')); // 更新结束时间
+      const newEndTime = newStartTime.add(15, 'minute');
+      setEndTime(newEndTime);
+      onTimeChange(newStartTime, newEndTime); // 通知父组件更新时间
+    } else {
+      onTimeChange(newStartTime, endTime); // 仅更新开始时间
     }
   };
 
-  const handleEndChange = (event: any) => {
+  const handleEndChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newEndTime = dayjs(event.target.value);
     setEndTime(newEndTime);
 
     if (newEndTime.isBefore(startTime)) {
-      setStartTime(newEndTime.subtract(15, 'minute')); // 更新开始时间
+      const newStartTime = newEndTime.subtract(15, 'minute');
+      setStartTime(newStartTime);
+      onTimeChange(newStartTime, newEndTime); // 通知父组件更新时间
+    } else {
+      onTimeChange(startTime, newEndTime); // 仅更新结束时间
     }
   };
 
   const handleClearStart = () => {
-    setStartTime(null); // 清空选择框内容
-    setEndTime(null); // 清空结束时间
+    setStartTime(null);
+    setEndTime(null);
+    onTimeChange(null, null); // 清空选择框内容时，通知父组件
   };
 
   const handleClearEnd = () => {
-    setEndTime(null); // 清空选择框内容
+    setEndTime(null);
+    onTimeChange(startTime, null); // 仅清空结束时间
   };
 
   const generateTimeOptions = () => {
@@ -65,7 +79,7 @@ const TimeRangePicker = () => {
             value={startTime ? startTime.format('YYYY-MM-DD HH:mm') : ''}
             onChange={handleStartChange}
           >
-            <option value="" disabled>请选择时间</option> {/* 默认选项 */}
+            <option value="" disabled>请选择时间</option>
             {timeOptions.map(time => (
               <option key={time} value={time}>
                 {time}
@@ -93,7 +107,7 @@ const TimeRangePicker = () => {
             value={endTime ? endTime.format('YYYY-MM-DD HH:mm') : ''}
             onChange={handleEndChange}
           >
-            <option value="" disabled>请选择时间</option> {/* 默认选项 */}
+            <option value="" disabled>请选择时间</option>
             {timeOptions.map(time => (
               <option key={time} value={time}>
                 {time}
