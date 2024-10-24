@@ -9,17 +9,17 @@
 // console.log(import.meta.env.PROD) // 是否生产环境
 // console.log(import.meta.env.SSR) // 是否是服务器端渲染(server side render)
 
-let BASE_URL = ''
+let BASE_URL = "";
 if (import.meta.env.PROD) {
-  BASE_URL = 'http://xcx.tomatoxfive.com:12000'
+  BASE_URL = "https://ka.aolc.cn:15000";
 } else {
-  BASE_URL = '/mock'
+  BASE_URL = "https://ka.aolc.cn:15000";
 }
 
-console.log(BASE_URL)
+console.log(BASE_URL);
 
 // 3.通过创建.env文件直接创建变量
 // console.log(import.meta.env.VITE_URL, import.meta.env.VITE_USE_MOCK, '-----------')
 
-export const TIME_OUT = 10000
-export { BASE_URL }
+export const TIME_OUT = 10000;
+export { BASE_URL };
