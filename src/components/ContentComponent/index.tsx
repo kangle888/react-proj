@@ -14,6 +14,7 @@ const ContentComponent: React.FC = () => {
         padding: 24,
         minHeight: 280,
         background: "#fff", // 可以改为从 theme 中获取颜色
+        borderRadius: "6px",
       }}
     >
       {/* 配置路由 */}

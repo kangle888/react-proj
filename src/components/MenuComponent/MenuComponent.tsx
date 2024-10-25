@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Layout, Menu } from "antd";
+import { ConfigProvider, Layout, Menu, theme } from "antd";
 import { useNavigate } from "react-router-dom";
 import type { MenuProps } from "antd";
 import { PieChartOutlined, UserOutlined } from "@ant-design/icons";
-import styles from "./MenuComponten.module.less";
+import styles from "./MenuComponent.module.less";
 
 const { Sider } = Layout;
 type MenuItem = Required<MenuProps>["items"][number];
@@ -36,15 +36,31 @@ const MenuComponent: React.FC = () => {
   };
 
   return (
-    <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed}>
+    <Sider
+      collapsible
+      collapsed={collapsed}
+      onCollapse={setCollapsed}
+      style={{ background: "#0F1F48" }}
+    >
       <div className={styles.logoVertical} />
-      <Menu
-        theme="dark"
-        defaultSelectedKeys={["/home"]} // 默认选中项
-        mode="inline"
-        items={items}
-        onClick={onMenuClick} // 点击时触发导航
-      />
+      <ConfigProvider
+        theme={{
+          components: {
+            Menu: {
+              darkItemBg: " #0F1F48",
+              darkItemSelectedBg: "#5d6fee",
+            },
+          },
+        }}
+      >
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={["/home"]} // 默认选中项
+          mode="inline"
+          items={items}
+          onClick={onMenuClick} // 点击时触发导航
+        />
+      </ConfigProvider>
     </Sider>
   );
 };
