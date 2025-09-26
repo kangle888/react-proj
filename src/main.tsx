@@ -6,6 +6,10 @@ import zhCN from "antd/locale/zh_CN";
 import "./base-ui/index.less";
 import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+
+NProgress.start();
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -25,3 +29,7 @@ createRoot(document.getElementById("root")!).render(
     </BrowserRouter>
   </React.StrictMode>
 );
+
+window.addEventListener("load", () => {
+  NProgress.done();
+});

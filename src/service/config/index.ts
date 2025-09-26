@@ -9,11 +9,15 @@
 // console.log(import.meta.env.PROD) // 是否生产环境
 // console.log(import.meta.env.SSR) // 是否是服务器端渲染(server side render)
 
-let BASE_URL = "";
-if (import.meta.env.PROD) {
-  BASE_URL = "https://ka.aolc.cn:15000";
-} else {
-  BASE_URL = "https://ka.aolc.cn:15000";
+// 优先使用环境变量，其次根据环境选择
+let BASE_URL = import.meta.env.VITE_API_BASE || "";
+if (!BASE_URL) {
+  if (import.meta.env.PROD) {
+    BASE_URL = "https://ka.aolc.cn:15000";
+  } else {
+    // 开发环境默认走 Vite 代理，保持空串
+    BASE_URL = "/api";
+  }
 }
 
 console.log(BASE_URL);

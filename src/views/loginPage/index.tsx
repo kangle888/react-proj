@@ -5,7 +5,7 @@ import {
   UserOutlined,
   SafetyCertificateOutlined,
 } from '@ant-design/icons'
-import { accountLoginRequest } from '@/service/login/login'
+import { accountLoginRequest, userInfoRequest } from '@/service/login/login'
 import { LOGIN_TOKEN } from '@/global/constants'
 import { localCache } from '@/utils/cache'
 import styles from './loginPage.module.less'
@@ -33,17 +33,26 @@ export const LoginPage = () => {
     captcha: string
     remember: boolean
   }) => {
-    if (values.captcha?.toUpperCase() !== captcha) {
-      return
+    // if (values.captcha?.toUpperCase() !== captcha) {
+    //   return
+    // }
+    // const res = await accountLoginRequest({
+    //   loginName: values.loginName,
+    //   password: values.password,
+    // })
+    const params = {
+      userId: '1'
     }
-    const res = await accountLoginRequest({
-      loginName: values.loginName,
-      password: values.password,
-    })
-    if ((res as any).code === 200) {
-      localCache.setCache(LOGIN_TOKEN, (res as any).data)
-      navigate('/home')
-    }
+    const res = await userInfoRequest('1')
+   console.log(res)
+    // if ((res as any).code === 200) {
+    //   localCache.setCache(LOGIN_TOKEN, (res as any).data)
+    //   // 登录成功后，拉取用户信息
+    //   try {
+    //     await userInfoRequest(values.loginName)
+    //   } catch {}
+    //   navigate('/home')
+    // }
   }
 
   return (

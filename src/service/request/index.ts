@@ -1,4 +1,7 @@
 import axios from "axios";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+import { showLoading, hideLoading } from "@/components/BasicLoading";
 import type { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 import type { HYRequestConfig } from "./type";
 import { message } from "antd";
@@ -62,19 +65,27 @@ class HYRequest {
     // 每个instance实例都添加拦截器
     this.instance.interceptors.request.use(
       (config) => {
-        // loading/token
+        // global loading + progress
+        NProgress.start();
+        showLoading();
         return config;
       },
       (err) => {
+        NProgress.done();
+        hideLoading();
         return err;
       }
     );
     this.instance.interceptors.response.use(
       (res) => {
+        NProgress.done();
+        hideLoading();
         return res.data;
         // 加在这
       },
       (err) => {
+        NProgress.done();
+        hideLoading();
         return err;
       }
     );
